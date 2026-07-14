@@ -3,7 +3,7 @@
 #include <cstdint>
 
 
-constexpr const char* XAUTO_COMPAT_VERSION = "bitter_oyster"; // TODO: externalize
+constexpr const char* XAUTO_COMPAT_VERSION = "ghost_fungus"; // TODO: externalize
 
 
 class XAutoErrorResponse {
@@ -40,8 +40,7 @@ typedef std::tuple<
     std::array<uint8_t, 80>,
     x87fpuTup,
     uint32_t,
-    std::array<uint8_t, 16 * 16>,
-    std::array<uint8_t, 16 * 32>
+    std::array<uint8_t, 64 * 32>
 > CtxTup64;
 typedef std::tuple<
     size_t, size_t, size_t, size_t, size_t, size_t, size_t, size_t, // gp regs
@@ -51,8 +50,7 @@ typedef std::tuple<
     std::array<uint8_t, 80>,
     x87fpuTup,
     uint32_t,
-    std::array<uint8_t, 8 * 16>,
-    std::array<uint8_t, 8 * 32>
+    std::array<uint8_t, 64 * 8>
 > CtxTup32;
 typedef std::tuple<bool, bool, bool, bool, bool, bool, bool, bool, bool> FlagsTup;
 typedef std::tuple<std::array<uint8_t, 10>, size_t, size_t> FpuRegsTup;
@@ -69,7 +67,7 @@ void dbg_write_setting_uint(msgpack::object root, msgpack::sbuffer& response_buf
 void dbg_is_valid_read_ptr(msgpack::object root, msgpack::sbuffer& response_buffer);
 
 typedef std::tuple<std::string, size_t, size_t, size_t, size_t, size_t> DisasmArgTup;
-typedef std::tuple<std::string, size_t, size_t, size_t, std::array<DisasmArgTup, 3>> DisasmTup;
+typedef std::tuple<std::string, std::string, size_t, size_t, size_t, std::array<DisasmArgTup, 3>> DisasmTup;
 void disassemble_at(msgpack::object root, msgpack::sbuffer& response_buffer);
 void assemble_at(msgpack::object root, msgpack::sbuffer& response_buffer);
 
@@ -81,4 +79,5 @@ void get_breakpoints(msgpack::object root, msgpack::sbuffer& response_buffer);
 void get_label_at(msgpack::object root, msgpack::sbuffer& response_buffer);
 void get_comment_at(msgpack::object root, msgpack::sbuffer& response_buffer);
 void get_symbol_at(msgpack::object root, msgpack::sbuffer& response_buffer);
+void get_log(msgpack::object root, msgpack::sbuffer& response_buffer);
 std::wstring get_session_filename(size_t session_pid);

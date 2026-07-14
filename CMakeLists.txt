@@ -49,9 +49,9 @@ include(FetchContent)
 message(STATUS "Fetching x64dbg...")
 FetchContent_Declare(x64dbg
 	URL
-		"https://sourceforge.net/projects/x64dbg/files/snapshots/snapshot_2025-01-17_12-45.zip"
+		"https://sourceforge.net/projects/x64dbg/files/snapshots/snapshot_2026-05-27_12-11.zip"
 	URL_HASH
-		SHA1=57e77f9a406647b0ad31311630e3fc44f25979b3
+		SHA1=4f70bf300e79e0a88d59ab3bfe68d22daf003cea
 )
 FetchContent_MakeAvailable(x64dbg)
 
@@ -65,15 +65,28 @@ find_package(msgpack-cxx REQUIRED)
 find_package(Boost REQUIRED)
 
 # Target: x64dbg-automate
+set(CMKR_TARGET x64dbg-automate)
+find_path(DETOURS_INCLUDE_DIRS "detours/detours.h" REQUIRED)
+find_library(DETOURS_LIBRARY detours REQUIRED)
+add_library(detours_target STATIC IMPORTED)
+set_target_properties(detours_target PROPERTIES
+    IMPORTED_LOCATION "${DETOURS_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${DETOURS_INCLUDE_DIRS}"
+)
+
 set(x64dbg-automate_SOURCES
 	"src/plugin.cpp"
 	"src/pluginmain.cpp"
 	"src/xauto_cmd.cpp"
+	"src/xauto_log.cpp"
 	"src/xauto_server.cpp"
 	"src/plugin.h"
 	"src/pluginmain.h"
+	"src/resource.h"
 	"src/xauto_cmd.h"
+	"src/xauto_log.h"
 	"src/xauto_server.h"
+	"src/plugin.rc"
 	cmake.toml
 )
 
@@ -89,5 +102,6 @@ target_compile_features(x64dbg-automate PUBLIC
 target_link_libraries(x64dbg-automate PUBLIC
 	cppzmq
 	msgpack-cxx
+	detours_target
 )
 
